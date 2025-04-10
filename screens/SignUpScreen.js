@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, ImageBackground,  ActivityIndicator  } from 'react-native';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function SignUpScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleSignUp = () => {
     if (!email || !password) {
       Alert.alert('Error', 'Please fill in all fields');
       return;
     }
+    setLoading(true);
     createUserWithEmailAndPassword(auth, email, password)
       .then(() => navigation.replace('Dashboard'))
       .catch((error) => Alert.alert('Sign Up Error', error.message));
@@ -30,16 +34,30 @@ export default function SignUpScreen({ navigation }) {
           keyboardType="email-address"
           placeholderTextColor="#888"
         />
-        <TextInput
-          placeholder="Password (min 6 characters)"
-          style={styles.input}
-          value={password}
-          secureTextEntry
-          onChangeText={setPassword}
-          placeholderTextColor="#888"
-        />
-        <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-          <Text style={styles.buttonText}>Sign Up</Text>
+         <View style={styles.passwordContainer}>
+          <TextInput
+            placeholder="Password (min 6 characters)"
+            style={[styles.input, { flex: 1 }]}
+            value={password}
+            secureTextEntry={!passwordVisible}
+            onChangeText={setPassword}
+            placeholderTextColor="#888"
+          />
+          <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)}>
+            <Ionicons
+              name={passwordVisible ? 'eye-off' : 'eye'}
+              size={24}
+              color="#4287f5"
+              style={styles.eyeIcon}
+            />
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity style={styles.button} onPress={handleSignUp} disabled={loading}>
+          {loading ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Text style={styles.buttonText}>Sign Up</Text>
+          )}
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
           <Text style={styles.link}>Already have an account? Sign In</Text>
@@ -57,4 +75,6 @@ const styles = StyleSheet.create({
   button: { backgroundColor: '#4287f5', padding: 15, borderRadius: 10, marginTop: 10 },
   buttonText: { color: '#fff', textAlign: 'center', fontWeight: '600', fontSize: 16 },
   link: { color: '#4287f5', marginTop: 15, textAlign: 'center', fontSize: 16 },
+  passwordContainer: { flexDirection: 'row', alignItems: 'center', marginVertical: 10 },
+  eyeIcon: { marginLeft: 10 },
 });
