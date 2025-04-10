@@ -1,6 +1,5 @@
-// screens/CreateEventScreen.js
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, ScrollView } from 'react-native';
+import { Text, TextInput, TouchableOpacity, Alert, StyleSheet, ScrollView } from 'react-native';
 import { collection, addDoc } from 'firebase/firestore';
 import { db, auth } from '../firebase';
 

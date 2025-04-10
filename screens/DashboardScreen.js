@@ -1,4 +1,3 @@
-// screens/DashboardScreen.js
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Alert, StyleSheet, ActivityIndicator } from 'react-native';
 import { signOut } from 'firebase/auth';
@@ -11,7 +10,6 @@ export default function DashboardScreen({ navigation }) {
   const [loading, setLoading] = useState(true);
 
   const fetchEvents = () => {
-    // Query events created by current user
     const q = query(collection(db, 'events'), where('userId', '==', auth.currentUser.uid));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       let eventsArray = [];

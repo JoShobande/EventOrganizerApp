@@ -1,4 +1,3 @@
-// screens/FavouritesScreen.js
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Alert, StyleSheet, ActivityIndicator } from 'react-native';
 import { collection, query, where, onSnapshot, deleteDoc, doc, updateDoc } from 'firebase/firestore';
